@@ -1,28 +1,29 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from "sequelize";
 import { ApolloServer } from '@apollo/server';
 import allTypeDefs from './src/schemas/index.schema.js';
 import allResolvers from './src/resolvers/Index.resolver.js';
 import { logger } from './src/helpers/logger.js';
-import chalk from 'chalk';
-import dotenv from 'dotenv'
+// import chalk from 'chalk';
+// import dotenv from 'dotenv'
 
-/**
- * creating the graph ql server 
- */
+// /**
+//  * creating the graph ql server 
+//  */
+
 const server = new ApolloServer({
   typeDefs: allTypeDefs,
   resolvers: allResolvers,
   includeStacktraceInErrorResponses: false, //to exclude stackTrace parameter from error messages
   introspection: true,
 });
-/**
- * dot env to use environment variables
- */
+// /**
+//  * dot env to use environment variables
+//  */
 dotenv.config();
-/**
- * @type : plugin /middle ware
- * @description: use to log type of the request
- */
+// /**
+//  * @type : plugin /middle ware
+//  * @description: use to log type of the request
+//  */
 const requestPlugin = (req, res, next) => {
   const { query, operationName } = req.body;
   if (query && operationName) {
@@ -39,10 +40,10 @@ const requestPlugin = (req, res, next) => {
   next();
 }
 
-/**
- * sql connection setup
- * 
- */
+// /**
+//  * sql connection setup
+//  * 
+//  */
 
 const connectToSQLDatabase = async () => {
   try {
@@ -55,7 +56,7 @@ const connectToSQLDatabase = async () => {
       logging: false,
     });
 
-    await sequelize.authenticate();
+    // await sequelize.authenticate();
 
     console.log('Connection to the SQL database has been established successfully.');
 
@@ -75,4 +76,4 @@ const connectToSQLDatabase = async () => {
 connectToSQLDatabase();
 
 
-export { server, requestPlugin, connectToMongoDB };
+export { server, requestPlugin };
