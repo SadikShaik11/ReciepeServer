@@ -42,19 +42,14 @@ const recipeResolver = {
   },
 
   Mutation: {
-    createRecipe: async (parent, { recipeInput: { name, description } }, contextValue) => {
-      const createdRecipe = new RecipeModel({
-        name: name,
-        description: description,
-        createdAt: new Date().toISOString(),
-        thumbsUp: 0,
-        thumbsDown: 0,
-      });
-      const res = await createdRecipe.save();
-      return {
-        id: res.id,
-        ...res._doc,
-      };
+    createRecipe: async (_, { recipeInput }, contextValue) => {
+      try {
+        logger.info("inside Mutations : createRecipe method")
+        const newRecipe = await RecipeModel.create(recipeInput)
+        return newRecipe;
+      } catch (err) {
+        return err
+      }
     },
 
     deleteRecipe: async (_, { id }, contextValue) => {
@@ -67,7 +62,7 @@ const recipeResolver = {
       }
       const isDeleted = (await RecipeModel.deleteOne({ _id: id })).deletedCount;
       return {
-        isSuccess: isDeleted, // return true if something is deleted, 0 if nothing is deleted
+        isSuccess: isDeleted,
         message: 'Recipe deleted.',
       };
     },
@@ -92,49 +87,9 @@ const recipeResolver = {
       };
     },
 
-    incrementThumbsUp: async (_, { id }, { user }) => {
-      const isExists = await RecipeHelper.isRecipeExists(id);
-      if (!isExists) {
-        throwCustomError(
-          `Recipe with id ${id} does not exist.`,
-          ErrorTypes.NOT_FOUND
-        );
-      }
-      await RecipeModel.findByIdAndUpdate(
-        { _id: id },
-        {
-          $inc: { thumbsUp: 1 },
-        },
-        { new: true }
-      );
-
-      return {
-        isSuccess: true,
-        message: 'Thumbs up incremented.',
-      };
-    },
-
-    incrementThumbsDown: async (_, { id }, { user }) => {
-      const isExists = await RecipeHelper.isRecipeExists(id);
-      if (!isExists) {
-        throwCustomError(
-          `Recipe with id ${id} does not exist.`,
-          ErrorTypes.NOT_FOUND
-        );
-      }
-      await RecipeModel.findByIdAndUpdate(
-        { _id: id },
-        {
-          $inc: { thumbsDown: 1 },
-        },
-        { new: true }
-      );
-      return {
-        isSuccess: true,
-        message: 'Thumbs Down incremented.',
-      };
-    },
   },
+  
+
 };
 
 

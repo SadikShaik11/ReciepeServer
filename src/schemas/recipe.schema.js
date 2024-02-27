@@ -4,6 +4,11 @@ const recipeSchema = gql`
   input RecipeInput {
     name: String!
     description: String!
+    image: String
+    ratings :String
+    ingredients:String!
+    cookingInstructions: String!
+    cookingTimeInMinutes : Int!
   }
 
   # union SingleRecipeResult = Recipe | NotExistsError
@@ -22,8 +27,6 @@ const recipeSchema = gql`
     createRecipe(recipeInput: RecipeInput): Recipe!
     deleteRecipe(id: ID!): RecipeSuccess
     editRecipe(id: ID!, recipeInput: RecipeInput): RecipeSuccess
-    incrementThumbsUp(id: ID!): RecipeSuccess
-    incrementThumbsDown(id: ID!): RecipeSuccess
   }
 `;
 

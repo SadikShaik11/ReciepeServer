@@ -10,13 +10,22 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
-  createdAt: {
-    type: String,
+  image: {
+    type: String
   },
-  updatedAt: {
-    type: String,
+  ratings: {
+    type: String
   },
-});
+  ingredients: {
+    type :String
+  },
+  cookingInstructions: {
+    type:String
+  },
+  cookingTimeInMinutes: {
+    type :Number
+  }
+}, { timestamps: true });
 
 const RecipeModel = model('Recipe', recipeSchema);
 export default RecipeModel;

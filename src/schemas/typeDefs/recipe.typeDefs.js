@@ -6,8 +6,8 @@ const recipeTypeDefs = gql`
     name: String
     description: String
     createdAt: String
-    thumbsUp: Int
-    thumbsDown: Int
+    image:String
+    ratings:String
   }
 `;
 export default recipeTypeDefs;

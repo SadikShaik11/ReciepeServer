@@ -28,7 +28,8 @@
     "graphql-tools": "^9.0.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.11.5",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "yarn": "^1.22.21"
   },
   "type": "module"
 }
