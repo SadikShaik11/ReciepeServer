@@ -3,7 +3,7 @@
  * @description : to log track the APi Activity
  */
 import { logger } from '../helpers/logger.js';
-import RecipeModel from '../models/recipe.model.js';
+// import RecipeModel from '../models/recipe.model.js';
 import RecipeHelper from '../helpers/recipe.helper.js';
 import throwCustomError, {
   ErrorTypes,
@@ -88,7 +88,7 @@ const recipeResolver = {
     },
 
   },
-  
+
 
 };
 

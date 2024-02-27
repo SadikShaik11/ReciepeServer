@@ -1,7 +1,7 @@
+const { Sequelize } = require('sequelize');
 import { ApolloServer } from '@apollo/server';
 import allTypeDefs from './src/schemas/index.schema.js';
 import allResolvers from './src/resolvers/Index.resolver.js';
-import mongoose from 'mongoose';
 import { logger } from './src/helpers/logger.js';
 import chalk from 'chalk';
 import dotenv from 'dotenv'
@@ -40,28 +40,39 @@ const requestPlugin = (req, res, next) => {
 }
 
 /**
- * mongodb connection setup
+ * sql connection setup
  * 
  */
-const connectToMongoDB = async () => {
-  try {
-    const connectionOptions = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
-    const mongodbUri = process.env.DATABASE_URL;
-    mongoose.set('strictQuery', false);
-    mongoose.connect(mongodbUri, connectionOptions).then(() => {
-      console.log(chalk.yellow.bold('################################################################'));
-      console.log(chalk.italic.bold('=====🚀🚀🚀 ####   Connected to MongoDB    #### 🚀🚀🚀======'))
-      console.log(chalk.yellow.bold('################################################################'));
-    }).catch((err) => {
 
+const connectToSQLDatabase = async () => {
+  try {
+    const sequelize = new Sequelize({
+      dialect: 'mysql',
+      host: 'localhost',
+      username: 'sa',
+      password: '',
+      database: 'test',
+      logging: false,
     });
+
+    await sequelize.authenticate();
+
+    console.log('Connection to the SQL database has been established successfully.');
+
+    // Sync the models with the database (create tables if they don't exist)
+    await sequelize.sync();
+
+    console.log('Models synced with the database.');
+
+    console.log('=====🚀🚀🚀 ####   Connected to SQL Database   #### 🚀🚀🚀');
   } catch (error) {
-    console.error(chalk.redBright.bold('Error connecting to MongoDB:', error));
+    console.error('Error connecting to SQL Database:', error);
     process.exit(1); // Exit the process with an error code
   }
 };
+
+// Call the function to connect to the SQL database
+connectToSQLDatabase();
+
 
 export { server, requestPlugin, connectToMongoDB };
